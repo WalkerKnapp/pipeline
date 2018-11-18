@@ -16,7 +16,7 @@ public class Pipeline {
                     throw new PipelineException("The output supertype of " + joints.get(i - 1).getClass().getSimpleName() +
                             " does not match the desired supertype of " + joints.get(i).getClass().getSimpleName());
                 }
-                if(joints.get(i).getDesiredType() != null  && joints.get(i - 1).getOutputType() != null && joints.get(i).getDesiredType() == joints.get(i - 1).getOutputType()){
+                if(joints.get(i).getDesiredType() != null  && joints.get(i - 1).getOutputType() != null && joints.get(i).getDesiredType() != joints.get(i - 1).getOutputType()){
                     throw new PipelineException("The output type of " + joints.get(i - 1).getClass().getSimpleName() +
                             " does not match the desired type of " + joints.get(i).getClass().getSimpleName());
                 }
