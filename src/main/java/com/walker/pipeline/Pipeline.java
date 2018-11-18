@@ -45,7 +45,7 @@ public class Pipeline {
     }
 
     public static class Builder {
-        private ArrayList<PipelineJoint> joints;
+        private ArrayList<PipelineJoint> joints = new ArrayList<>();
 
         public Builder joint(PipelineJoint joint){
             joints.add(joint);
