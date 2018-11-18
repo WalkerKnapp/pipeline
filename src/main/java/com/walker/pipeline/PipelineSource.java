@@ -10,7 +10,7 @@ public abstract class PipelineSource extends PipelineJoint {
     }
 
     @Override
-    void consumeBuffer(ByteBuffer buffer) {
+    protected void consumeBuffer(ByteBuffer buffer) {
         // No implementation needed
     }
 

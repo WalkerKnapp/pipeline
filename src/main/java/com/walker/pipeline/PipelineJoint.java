@@ -53,9 +53,9 @@ public abstract class PipelineJoint {
         bufferConsumer.accept(buffer);
     }
 
-    abstract void consumeBuffer(ByteBuffer buffer);
+    protected abstract void consumeBuffer(ByteBuffer buffer);
 
-    abstract void flush();
+    protected abstract void flush();
 
     public void ready(){
         // Implementation optional
