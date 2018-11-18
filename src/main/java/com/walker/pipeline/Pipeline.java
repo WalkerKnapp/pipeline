@@ -40,7 +40,11 @@ public class Pipeline {
         }
     }
 
-    public class Builder {
+    public static Builder builder(){
+        return new Builder();
+    }
+
+    private static class Builder {
         private ArrayList<PipelineJoint> joints;
 
         public Builder joint(PipelineJoint joint){
