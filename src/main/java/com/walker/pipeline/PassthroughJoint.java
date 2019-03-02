@@ -1,15 +1,24 @@
 package com.walker.pipeline;
 
-import java.nio.ByteBuffer;
-
-public class PassthroughJoint extends PipelineJoint {
+public class PassthroughJoint<T> extends PipelineJoint<T> {
     protected PassthroughJoint(PipelineDatatype.SuperType superType, PipelineDatatype type) {
         super(superType, superType, type, type);
     }
 
     @Override
-    protected void consumeBuffer(ByteBuffer buffer) {
+    protected void consumeBuffer(T buffer) {
         pushBuffer(buffer);
+    }
+
+    @Override
+    protected T provideZCBuffer() {
+        // TODO: Support Zero-Copy transfers
+        return null;
+    }
+
+    @Override
+    protected void consumeZC() {
+        // TODO: Support Zero-Copy transfers
     }
 
     @Override

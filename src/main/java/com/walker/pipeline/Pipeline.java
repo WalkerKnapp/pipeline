@@ -2,11 +2,11 @@ package com.walker.pipeline;
 
 import java.util.ArrayList;
 
-public class Pipeline {
+public class Pipeline<T> {
 
-    private ArrayList<PipelineJoint> joints;
+    private ArrayList<PipelineJoint<T>> joints;
 
-    private Pipeline(ArrayList<PipelineJoint> joints){
+    private Pipeline(ArrayList<PipelineJoint<T>> joints){
         this.joints = joints;
 
         // Check link types
@@ -26,6 +26,8 @@ public class Pipeline {
         // Create direct links
         for(int i = 0; i < joints.size() - 1; i++){
             joints.get(i).setBufferConsumer(joints.get(i + 1)::consumeBuffer);
+            joints.get(i).setZcBufferNotifier(joints.get(i + 1)::consumeZC);
+            joints.get(i).setZcBufferSupplier(joints.get(i + 1)::provideZCBuffer);
         }
 
         // Notify joints in reverse order
@@ -40,20 +42,20 @@ public class Pipeline {
         }
     }
 
-    public static Builder builder(){
-        return new Builder();
+    public static <T> Builder builder(){
+        return new Builder<T>();
     }
 
-    public static class Builder {
-        private ArrayList<PipelineJoint> joints = new ArrayList<>();
+    public static class Builder<T> {
+        private ArrayList<PipelineJoint<T>> joints = new ArrayList<>();
 
-        public Builder joint(PipelineJoint joint){
+        public Builder joint(PipelineJoint<T> joint){
             joints.add(joint);
             return this;
         }
 
         public Pipeline build(){
-            return new Pipeline(joints);
+            return new Pipeline<T>(joints);
         }
     }
 }

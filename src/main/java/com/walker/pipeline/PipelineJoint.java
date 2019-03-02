@@ -1,16 +1,18 @@
 package com.walker.pipeline;
 
-import java.nio.ByteBuffer;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
-public abstract class PipelineJoint {
+public abstract class PipelineJoint<T> {
 
     private PipelineDatatype.SuperType desiredSuperType;
     private PipelineDatatype.SuperType outputSuperType;
     private PipelineDatatype desiredType;
     private PipelineDatatype outputType;
 
-    private Consumer<ByteBuffer> bufferConsumer;
+    private Consumer<T> bufferConsumer;
+    private Supplier<T> zcBufferSupplier;
+    private Runnable zcBufferNotifier;
 
     protected PipelineJoint(PipelineDatatype.SuperType desiredSuperType, PipelineDatatype.SuperType outputSuperType,
                             PipelineDatatype desiredType, PipelineDatatype outputType){
@@ -49,11 +51,23 @@ public abstract class PipelineJoint {
         return outputType;
     }
 
-    protected void pushBuffer(ByteBuffer buffer) {
+    protected void pushBuffer(T buffer) {
         bufferConsumer.accept(buffer);
     }
 
-    protected abstract void consumeBuffer(ByteBuffer buffer);
+    protected T requestZCBuffer() {
+        return zcBufferSupplier.get();
+    }
+
+    protected void pushZCBuffer() {
+        zcBufferNotifier.run();
+    }
+
+    protected abstract void consumeBuffer(T buffer);
+
+    protected abstract T provideZCBuffer();
+
+    protected abstract void consumeZC();
 
     protected abstract void flush();
 
@@ -61,7 +75,15 @@ public abstract class PipelineJoint {
         // Implementation optional
     }
 
-    void setBufferConsumer(Consumer<ByteBuffer> bufferConsumer){
+    void setBufferConsumer(Consumer<T> bufferConsumer){
         this.bufferConsumer = bufferConsumer;
+    }
+
+    void setZcBufferSupplier(Supplier<T> bufferSupplier){
+        this.zcBufferSupplier = bufferSupplier;
+    }
+
+    void setZcBufferNotifier(Runnable bufferNotifyer){
+        this.zcBufferNotifier = bufferNotifyer;
     }
 }
